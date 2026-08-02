@@ -32,11 +32,18 @@ jobs:
           # Strip leading 'v' from tag (v0.1.0 → 0.1.0)
           VERSION="${VERSION#v}"
           echo "Packaging version: ${VERSION}"
-          echo "Build output:"
-          ls -la .build/release/
-          cp README.md .build/release/README.md
-          (cd .build/release && zip -X "../../osaurus.ticktick-${VERSION}.zip" libosaurus-ticktick.dylib README.md)
-          rm -f .build/release/README.md
+          # Find the dylib wherever swift build put it
+          DYLIB=$(find .build -name "libosaurus-ticktick.dylib" -type f | head -1)
+          echo "Found dylib: ${DYLIB}"
+          if [ -z "$DYLIB" ]; then
+            echo "ERROR: dylib not found. Build output:"
+            find .build -name "*.dylib" -type f
+            exit 1
+          fi
+          DYLIB_DIR=$(dirname "$DYLIB")
+          cp README.md "$DYLIB_DIR/README.md"
+          (cd "$DYLIB_DIR" && zip -X "../../osaurus.ticktick-${VERSION}.zip" libosaurus-ticktick.dylib README.md)
+          rm -f "$DYLIB_DIR/README.md"
           echo "Package created:"
           ls -la osaurus.ticktick-*.zip
 
