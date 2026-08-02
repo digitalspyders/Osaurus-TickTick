@@ -39,13 +39,13 @@ jobs:
           DYLIB_DIR=$(dirname "$DYLIB_PATH")
           cp README.md "$DYLIB_DIR/README.md"
           cd "$DYLIB_DIR"
-          zip -X "$GITHUB_WORKSPACE/osaurus.ticktick-0.1.0.zip" libosaurus-ticktick.dylib README.md
+          zip -X "$GITHUB_WORKSPACE/ticktick-0.1.0.zip" libosaurus-ticktick.dylib README.md
           cd "$GITHUB_WORKSPACE"
           echo "=== Result ==="
-          ls -la osaurus.ticktick-0.1.0.zip
+          ls -la ticktick-0.1.0.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: osaurus.ticktick-0.1.0.zip
+          files: ticktick-0.1.0.zip
           generate_release_notes: true

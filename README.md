@@ -8,7 +8,7 @@ An [Osaurus](https://osaurus.ai) plugin for managing [TickTick](https://ticktick
 ## Installation
 
 ```bash
-osaurus tools install https://github.com/digitalspyders/Osaurus-TickTick/releases/download/v0.1.0/osaurus.ticktick-0.1.0.zip
+osaurus tools install https://github.com/digitalspyders/Osaurus-TickTick/releases/download/v0.1.0/ticktick-0.1.0.zip
 ```
 
 ## Setup
