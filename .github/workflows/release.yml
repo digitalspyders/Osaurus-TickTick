@@ -16,7 +16,25 @@ jobs:
 
   release:
     needs: test
-    uses: osaurus-ai/osaurus-tools/.github/workflows/build-plugin.yml@015ade6cda1840d81929f0080fc5d8c1371bfe16
+    runs-on: macos-15
     permissions:
       contents: write
-    secrets: inherit
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: swift build -c release
+
+      - name: Package
+        run: |
+          cp README.md .build/release/README.md
+          cd .build/release
+          zip -X "../../osaurus.ticktick-${GITHUB_REF_NAME}.zip" libosaurus-ticktick.dylib README.md
+          cd ../..
+          rm -f .build/release/README.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: osaurus.ticktick-${{ github.ref_name }}.zip
+          generate_release_notes: true
