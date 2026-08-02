@@ -26,29 +26,26 @@ jobs:
         run: swift build -c release
 
       - name: Package
-        env:
-          VERSION: ${{ github.ref_name }}
         run: |
-          # Strip leading 'v' from tag (v0.1.0 → 0.1.0)
-          VERSION="${VERSION#v}"
-          echo "Packaging version: ${VERSION}"
-          # Find the dylib wherever swift build put it
-          DYLIB=$(find .build -name "libosaurus-ticktick.dylib" -type f | head -1)
-          echo "Found dylib: ${DYLIB}"
-          if [ -z "$DYLIB" ]; then
-            echo "ERROR: dylib not found. Build output:"
-            find .build -name "*.dylib" -type f
+          echo "=== Build output ==="
+          find .build -name "*.dylib" -type f
+          echo "=== Creating zip ==="
+          DYLIB_PATH=$(find .build -name "libosaurus-ticktick.dylib" -type f | head -1)
+          if [ -z "$DYLIB_PATH" ]; then
+            echo "ERROR: No dylib found"
             exit 1
           fi
-          DYLIB_DIR=$(dirname "$DYLIB")
+          echo "Using dylib: $DYLIB_PATH"
+          DYLIB_DIR=$(dirname "$DYLIB_PATH")
           cp README.md "$DYLIB_DIR/README.md"
-          (cd "$DYLIB_DIR" && zip -X "../../osaurus.ticktick-${VERSION}.zip" libosaurus-ticktick.dylib README.md)
-          rm -f "$DYLIB_DIR/README.md"
-          echo "Package created:"
-          ls -la osaurus.ticktick-*.zip
+          cd "$DYLIB_DIR"
+          zip -X "$GITHUB_WORKSPACE/osaurus.ticktick-0.1.0.zip" libosaurus-ticktick.dylib README.md
+          cd "$GITHUB_WORKSPACE"
+          echo "=== Result ==="
+          ls -la osaurus.ticktick-0.1.0.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: osaurus.ticktick-*.zip
+          files: osaurus.ticktick-0.1.0.zip
           generate_release_notes: true
