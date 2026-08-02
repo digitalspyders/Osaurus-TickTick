@@ -26,15 +26,20 @@ jobs:
         run: swift build -c release
 
       - name: Package
+        env:
+          VERSION: ${{ github.ref_name }}
         run: |
+          # Strip leading 'v' from tag (v0.1.0 → 0.1.0)
+          VERSION="${VERSION#v}"
           cp README.md .build/release/README.md
           cd .build/release
-          zip -X "../../osaurus.ticktick-${GITHUB_REF_NAME}.zip" libosaurus-ticktick.dylib README.md
+          zip -X "../../osaurus.ticktick-${VERSION}.zip" libosaurus-ticktick.dylib README.md
           cd ../..
           rm -f .build/release/README.md
+          ls -la osaurus.ticktick-*.zip
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: osaurus.ticktick-${{ github.ref_name }}.zip
+          files: osaurus.ticktick-*.zip
           generate_release_notes: true
