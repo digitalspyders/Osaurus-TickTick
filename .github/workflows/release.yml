@@ -32,10 +32,12 @@ jobs:
           # Strip leading 'v' from tag (v0.1.0 → 0.1.0)
           VERSION="${VERSION#v}"
           echo "Packaging version: ${VERSION}"
-          ls -la README.md .build/release/libosaurus-ticktick.dylib
+          echo "Build output:"
+          ls -la .build/release/
           cp README.md .build/release/README.md
           (cd .build/release && zip -X "../../osaurus.ticktick-${VERSION}.zip" libosaurus-ticktick.dylib README.md)
           rm -f .build/release/README.md
+          echo "Package created:"
           ls -la osaurus.ticktick-*.zip
 
       - name: Create Release
