@@ -5,6 +5,12 @@ An [Osaurus](https://osaurus.ai) plugin for managing [TickTick](https://ticktick
 **Author:** Digital Spyders (admin@digitalspyders.net)  
 **License:** MIT
 
+## Installation
+
+```bash
+osaurus tools install https://github.com/digitalspyders/Osaurus-TickTick/releases/download/v0.1.0/osaurus.ticktick-0.1.0.zip
+```
+
 ## Setup
 
 1. Register a TickTick app at [developer.ticktick.com](https://developer.ticktick.com/manage) (or reuse an existing one). You need:
